@@ -13,6 +13,10 @@ if is_BigSur; then
     ln -sf $(brew --prefix openssl)/lib/* /usr/local/lib
     ln -sf $(brew --prefix openssl)/shared/* /usr/local/shared
     ln -sf $(brew --prefix openssl)/include/* /usr/local/include
+    # temporay link while python < 3.7 is built against 1.0.2
+    # 1.0.2 was expected to be installed in /usr/local/ope
+    # see https://github.com/actions/virtual-environments/blob/main/images/macos/provision/core/openssl.sh
+    ln -sf $(brew --prefix openssl) /usr/local/opt
     exit 0
 fi
 
