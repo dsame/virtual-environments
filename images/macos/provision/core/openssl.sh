@@ -9,7 +9,10 @@ echo Installing OpenSSL...
 /usr/local/bin/brew install openssl
 
 if is_BigSur; then
-    ln -sf $(brew --prefix openssl)/bin/openssl /usr/local/bin/openssl
+    ln -sf $(brew --prefix openssl)/bin/* /usr/local/bin
+    ln -sf $(brew --prefix openssl)/lib/* /usr/local/lib
+    ln -sf $(brew --prefix openssl)/shared/* /usr/local/shared
+    ln -sf $(brew --prefix openssl)/include/* /usr/local/include
     exit 0
 fi
 
