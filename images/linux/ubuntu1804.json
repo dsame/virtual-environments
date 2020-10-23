@@ -304,6 +304,9 @@
         {
             "type": "shell",
             "inline": [
+		"whoami",
+		"groups",
+		"sudo ls -la /var/run/docker.sock",
                 "pwsh -File {{user `image_folder`}}/SoftwareReport/SoftwareReport.Generator.ps1 -OutputDirectory {{user `image_folder`}}"
             ],
             "environment_vars": [
