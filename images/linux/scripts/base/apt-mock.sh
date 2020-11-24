@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -e
 set -x
 # A temporary workaround for https://github.com/Azure/azure-linux-extensions/issues/1238
 
@@ -44,3 +44,5 @@ done
 EOT
   chmod +x $prefix/$tool
 done
+
+exit 1
