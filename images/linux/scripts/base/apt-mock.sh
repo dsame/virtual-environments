@@ -1,10 +1,11 @@
 #!/bin/bash -e
-
+set -x
 # A temporary workaround for https://github.com/Azure/azure-linux-extensions/issues/1238
 
 prefix=/usr/local/bin
 
 for tool in apt apt-get apt-fast apt-key;do
+  which $tool || continue
   real_tool=`which $tool`
   cat >$prefix/$tool <<EOT
 #!/bin/sh
