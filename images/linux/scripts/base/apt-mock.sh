@@ -4,13 +4,8 @@ set -x
 
 prefix=/usr/local/bin
 
-for tool in apt apt-get apt-fast apt-key;do
-  which $tool
-  if [ $? -e 0 ];then
-    echo "exit $tool"
-    exit 1
-  fi
-  real_tool=`which $tool`
+for real_tool in /usr/bin/apt /usr/bin/apt-get /usr/bin/apt-fast /usr/bin/apt-key;do
+  tool=`basename $tool`
   cat >$prefix/$tool <<EOT
 #!/bin/sh
 
