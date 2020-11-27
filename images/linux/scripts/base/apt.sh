@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+set +x
 # Stop and disable apt-daily upgrade services;
 systemctl stop apt-daily.timer
 systemctl disable apt-daily.timer
