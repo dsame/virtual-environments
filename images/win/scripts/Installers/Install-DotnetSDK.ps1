@@ -24,6 +24,8 @@ function InstallSDKVersion (
     $sdkVersion
 )
 {
+  Start-Job -ScriptBlock  {
+    $sdkVersion=$using:sdkVersion
     if (!(Test-Path -Path "C:\Program Files\dotnet\sdk\$sdkVersion"))
     {
         Write-Host "Installing dotnet $sdkVersion"
@@ -51,6 +53,7 @@ function InstallSDKVersion (
         Pop-Location
         Remove-Item $projectPath -Force -Recurse
     }
+  }
 }
 
 function InstallAllValidSdks()
@@ -97,16 +100,33 @@ function InstallAllValidSdks()
             }
         }
     }
+    $running = @(Get-Job | Where-Object { $_.State -eq 'Running' })
+	    $running | Wait-Job
+
+
+	    $completed = @(Get-Job)
+
+	    foreach($job in $completed)
+	    {
+		    "job b"
+			    $job
+			    "job e"
+			    Receive-Job -Job $job 
+#| Out-File jobs.log -Append
+	    }
+
+    Remove-Job -State Completed
+
 }
 
 function RunPostInstallationSteps()
 {
-    Add-MachinePathItem "C:\Program Files\dotnet"
-    # Run script at startup for all users
-    $cmdDotNet = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -Command "[System.Environment]::SetEnvironmentVariable(''PATH'',"""$env:USERPROFILE\.dotnet\tools;$env:PATH""", ''USER'')"'
+	Add-MachinePathItem "C:\Program Files\dotnet"
+# Run script at startup for all users
+		$cmdDotNet = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -Command "[System.Environment]::SetEnvironmentVariable(''PATH'',"""$env:USERPROFILE\.dotnet\tools;$env:PATH""", ''USER'')"'
 
-    # Update Run key to run a script at logon
-    Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "DOTNETUSERPATH" -Value $cmdDotNet
+# Update Run key to run a script at logon
+		Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "DOTNETUSERPATH" -Value $cmdDotNet
 }
 
 InstallAllValidSdks
